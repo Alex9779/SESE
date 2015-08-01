@@ -1,4 +1,5 @@
 ﻿# SESE - SolidWorks Easy STL Export
+
 SESE is a SolidWorks Addin compatible with SolidWorks 2011 SP5 and newer.
 
 It provides an easy way to export the active document to an STL file used for 3D printing.
