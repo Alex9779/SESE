@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SESE", "SESE.csproj", "{12C331A6-D40E-4FA5-8392-96322D7B8CBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{12C331A6-D40E-4FA5-8392-96322D7B8CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12C331A6-D40E-4FA5-8392-96322D7B8CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12C331A6-D40E-4FA5-8392-96322D7B8CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12C331A6-D40E-4FA5-8392-96322D7B8CBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
