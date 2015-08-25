@@ -157,7 +157,7 @@ namespace ALITECS.SWx.SESE
             PartDoc pdoc = iSwApp.ActiveDoc;
 
             SelectData swSelectData = default(SelectData);
-            swSelectData = (SelectData)((ModelDoc2)pdoc).SelectionManager.CreateSelectData();
+            swSelectData = (SelectData)mdoc.SelectionManager.CreateSelectData();
 
             // set export coordinate system to one which is named "STL"
             mdoc.Extension.SetUserPreferenceString((int)swUserPreferenceStringValue_e.swFileSaveAsCoordinateSystem, (int)swUserPreferenceOption_e.swDetailingNoOptionSpecified, "STL");
@@ -180,6 +180,8 @@ namespace ALITECS.SWx.SESE
             }
             else // if there is only one body
             {
+                mdoc.ClearSelection2(true);
+
                 // save an STL in the same directory as the document named after the document
                 mdoc.Extension.SaveAs(Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + ".stl", 0, 3, null, errors, warnings);
             }
