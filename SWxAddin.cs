@@ -180,6 +180,8 @@ namespace ALITECS.SWx.SESE
             }
             else // if there is only one body
             {
+                mdoc.ClearSelection2(true);
+
                 // save an STL in the same directory as the document named after the document
                 mdoc.Extension.SaveAs(Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + ".stl", 0, 3, null, errors, warnings);
             }
