@@ -157,7 +157,7 @@ namespace ALITECS.SWx.SESE
             PartDoc pdoc = iSwApp.ActiveDoc;
 
             SelectData swSelectData = default(SelectData);
-            swSelectData = (SelectData)((ModelDoc2)pdoc).SelectionManager.CreateSelectData();
+            swSelectData = (SelectData)mdoc.SelectionManager.CreateSelectData();
 
             // set export coordinate system to one which is named "STL"
             mdoc.Extension.SetUserPreferenceString((int)swUserPreferenceStringValue_e.swFileSaveAsCoordinateSystem, (int)swUserPreferenceOption_e.swDetailingNoOptionSpecified, "STL");
