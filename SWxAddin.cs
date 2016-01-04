@@ -158,10 +158,7 @@ namespace ALITECS.SWx.SESE
 
             SelectData swSelectData = default(SelectData);
             swSelectData = (SelectData)mdoc.SelectionManager.CreateSelectData();
-
-            // set export coordinate system to one which is named "STL"
-            mdoc.Extension.SetUserPreferenceString((int)swUserPreferenceStringValue_e.swFileSaveAsCoordinateSystem, (int)swUserPreferenceOption_e.swDetailingNoOptionSpecified, "STL");
-
+            
             // get all solid bodies of the part
             object[] bodies = pdoc.GetBodies2(0, true);
 
@@ -172,6 +169,8 @@ namespace ALITECS.SWx.SESE
             {
                 foreach (Body2 body in bodies)
                 {
+                    // set export coordinate system to one which is named "STL_" + body's name
+                    mdoc.Extension.SetUserPreferenceString((int)swUserPreferenceStringValue_e.swFileSaveAsCoordinateSystem, (int)swUserPreferenceOption_e.swDetailingNoOptionSpecified, "STL_" + body.Name);
                     body.Select2(false, swSelectData); // select the body
 
                     // save an STL in the same directory as the document but named after the body
@@ -180,6 +179,9 @@ namespace ALITECS.SWx.SESE
             }
             else // if there is only one body
             {
+                // set export coordinate system to one which is named "STL"
+                mdoc.Extension.SetUserPreferenceString((int)swUserPreferenceStringValue_e.swFileSaveAsCoordinateSystem, (int)swUserPreferenceOption_e.swDetailingNoOptionSpecified, "STL");
+
                 mdoc.ClearSelection2(true);
 
                 // save an STL in the same directory as the document named after the document
