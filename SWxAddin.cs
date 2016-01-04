@@ -125,7 +125,7 @@ namespace ALITECS.SWx.SESE
             //Setup callbacks
             iSwApp.SetAddinCallbackInfo(0, this, addinID);
 
-            iSwApp.AddMenuItem4((int)swDocumentTypes_e.swDocPART, addinID, "Export STLs", -1, "ExportSTLs", "", "", "");
+            iSwApp.AddMenuItem4((int)swDocumentTypes_e.swDocPART, addinID, "Export STLs", -1, "ExportPartSTLs", "", "", "");
 
             return true;
         }
@@ -148,7 +148,7 @@ namespace ALITECS.SWx.SESE
 
         #region UI Callbacks
 
-        public void ExportSTLs()
+        public void ExportPartSTLs()
         {
             int errors = 0;
             int warnings = 0;
