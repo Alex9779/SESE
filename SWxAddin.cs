@@ -175,7 +175,7 @@ namespace ALITECS.SWx.SESE
                     body.Select2(false, swSelectData); // select the body
 
                     // save an STL in the same directory as the document but named after the body
-                    mdoc.Extension.SaveAs(Path.GetDirectoryName(path) + "\\" + body.Name + ".stl", 0, 3, null, errors, warnings);
+                    mdoc.Extension.SaveAs(Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "_" + body.Name + ".stl", 0, 3, null, errors, warnings);
                 }
             }
             else // if there is only one body
