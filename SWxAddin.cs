@@ -5,6 +5,7 @@ using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using SolidWorks.Interop.swpublished;
 using SolidWorksTools;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace ALITECS.SWx.SESE
 {
@@ -153,6 +154,8 @@ namespace ALITECS.SWx.SESE
 			int errors = 0;
 			int warnings = 0;
 
+			var swxVersion = iSwApp.RevisionNumber().Split('.');
+
 			ModelDoc2 mdoc = iSwApp.ActiveDoc;
 			PartDoc pdoc = iSwApp.ActiveDoc;
 
@@ -160,54 +163,79 @@ namespace ALITECS.SWx.SESE
 			swSelectData = (SelectData)mdoc.SelectionManager.CreateSelectData();
 
 			// get all solid bodies of the part
-			object[] bodies = pdoc.GetBodies2(0, true);
+			object[] bodies = pdoc.GetBodies2(0, false);
 
 			// the the full path of the opened document
 			string path = mdoc.GetPathName();
 
-			Configuration configuration = null;
-
-			if (((string[])mdoc.GetConfigurationNames()).GetLength(0) > 1)
+			var activeConfigurationName = (string)mdoc.GetActiveConfiguration().Name;
+			var configurationCount = mdoc.GetConfigurationCount();
+			
+			foreach (string configurationName in mdoc.GetConfigurationNames())
 			{
-				configuration = mdoc.GetActiveConfiguration();				
-			}
+				mdoc.ShowConfiguration2(configurationName);
 
-			if (bodies.Length > 1) // if there are more than one body in the part
-			{
-				foreach (Body2 body in bodies)
+				if (bodies.Length > 1) // if there are more than one body in the part
 				{
-					// set export coordinate system to one which is named "STL_" + body's name
-					mdoc.Extension.SetUserPreferenceString((int)swUserPreferenceStringValue_e.swFileSaveAsCoordinateSystem, (int)swUserPreferenceOption_e.swDetailingNoOptionSpecified, "STL_" + body.Name);
-					body.Select2(false, swSelectData); // select the body
+					foreach (Body2 body in bodies)
+					{
+						body.HideBody(false);
 
-					// save an STL in the same directory as the document but named after the body
+						// set export coordinate system to one which is named "STL_" + body's name
+						mdoc.Extension.SetUserPreferenceString((int)swUserPreferenceStringValue_e.swFileSaveAsCoordinateSystem, (int)swUserPreferenceOption_e.swDetailingNoOptionSpecified, "STL_" + body.Name);
+
+                        if (int.Parse(swxVersion[0]) <= 25)
+                        {
+                            body.Select2(false, swSelectData); // select the body
+                        }
+                        else
+                        {
+                            foreach (Body2 body2 in bodies)
+							{
+								if (body2.Name != body.Name)
+									body2.HideBody(true);
+							}
+                        }
+
+                        // save an STL in the same directory as the document but named after the body
+                        string filename = Path.GetDirectoryName(path)
+																+ "\\"
+																+ Path.GetFileNameWithoutExtension(path)
+																+ "_"
+																+ body.Name
+																+ (configurationCount > 1 ? "_" + configurationName : "")
+																+ ".stl";
+
+						mdoc.Extension.SaveAs(filename, 0, 3, null, errors, warnings);
+					}
+
+					if (int.Parse(swxVersion[0]) > 25)
+					{
+						foreach (Body2 body2 in bodies)
+						{							
+							body2.HideBody(false);
+						}
+					}
+				}
+				else // if there is only one body
+				{
+					// set export coordinate system to one which is named "STL"
+					mdoc.Extension.SetUserPreferenceString((int)swUserPreferenceStringValue_e.swFileSaveAsCoordinateSystem, (int)swUserPreferenceOption_e.swDetailingNoOptionSpecified, "STL");
+
+					mdoc.ClearSelection2(true);
+
+					// save an STL in the same directory as the document named after the document
 					string filename = Path.GetDirectoryName(path)
 															+ "\\"
 															+ Path.GetFileNameWithoutExtension(path)
-															+ "_"
-															+ body.Name
-															+ (configuration != null ? "_" + configuration.Name : "")
+															+ (configurationCount > 1 ? "_" + configurationName : "")
 															+ ".stl";
 
 					mdoc.Extension.SaveAs(filename, 0, 3, null, errors, warnings);
 				}
 			}
-			else // if there is only one body
-			{
-				// set export coordinate system to one which is named "STL"
-				mdoc.Extension.SetUserPreferenceString((int)swUserPreferenceStringValue_e.swFileSaveAsCoordinateSystem, (int)swUserPreferenceOption_e.swDetailingNoOptionSpecified, "STL");
 
-				mdoc.ClearSelection2(true);
-
-				// save an STL in the same directory as the document named after the document
-				string filename = Path.GetDirectoryName(path)
-														+ "\\"
-														+ Path.GetFileNameWithoutExtension(path)
-														+ (configuration != null ? "_" + configuration.Name : "")
-														+ ".stl";
-
-				mdoc.Extension.SaveAs(filename, 0, 3, null, errors, warnings);
-			}
+			mdoc.ShowConfiguration2(activeConfigurationName);
 		}
 
 		#endregion UI Callbacks
